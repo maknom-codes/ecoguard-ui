@@ -1,46 +1,71 @@
-# Getting Started with Create React App
+### EcoGuard - Real-Time Forest Monitoring System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+    EcoGuard is a cutting-edge progressive web application (PWA) designed for forest rangers working in challenging 
+    connectivity environments. The system enables incident reporting (poaching, deforestation, fires) with an offline-first 
+    approach and real-time synchronization.
 
-## Available Scripts
+### Key Features
 
-In the project directory, you can run:
+    Interactive Mapping: Visualization of protected areas and incidents via Leaflet and PostGIS.
 
-### `npm start`
+    Offline-First & Background Sync: Incident entry without network access, local storage in Dexie.js (IndexedDB)
+    and automatic synchronization via Service Worker upon restoration of 4G/5G.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+    Real-Time (WebSockets): Instant notification of new incidents between all connected guards via GraphQL Subscriptions.
+    Enhanced Security: Authentication via HttpOnly Cookies, strict CORS filtering, and secure identification of requests 
+    originating from the Service Worker.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+    Field UX: Touchscreen reporting form, precise manual repositioning of GPS points, and responsive toast notifications.
 
-### `npm test`
+### Technical Architecture
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    Backend (Java / Spring Boot)
+    Spring Boot 3.x with Spring Security (Stateless).
+    Spring GraphQL: Optimized communication via Queries, Mutations, and Subscriptions.
+    PostGIS: Spatial database for storing geometries (incidents and zones).
+    Project Reactor: Reactive management of WebSocket streams.
+    Frontend (React / TypeScript)
+    Apollo Client: Intelligent cache management and hybrid routing (HTTP/WS) via SplitLink.
+    React-Leaflet: Map rendering engine.
+    Dexie.js: IndexedDB layer for local data persistence.
+    Service Worker: Background synchronization manager and network proxy.
 
-### `npm run build`
+    ### ⚡ Performance & High Availability
+        - **Redis (Cache & Broker)**: Accelerated geographic reads and distributed session management.
+        - **Rate Limiting (Token Bucket)**: Protection against denial-of-service (DoS) attacks and API abuse, 
+            ensuring availability for field agents.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Installation & Configuration
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    ### Backend Prerequisites
+        Java 17
+        PostgreSQL 16+ avec l'extension PostGIS
+        Redis 
+    ###Frontend (ecoguardui) Prerequisites
+        Node.js 20+
+        Configuration Frontend (.env)
+            REACT_APP_BASE_URL=http://localhost:8081/graphql
+            REACT_APP_WS_URL=ws://localhost:8081/graphql
 
-### `npm run eject`
+### Offline Sync Flow
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+    -Entry: The agent fills out the form in the white area.
+    -Storage: The incident is saved in Dexie with a pending status.
+    -Waiting: The Service Worker records a sync-incidents task.
+    -Response: As soon as the browser detects the network, the Service Worker sends 
+        data via a GraphQL mutation secured by an X-Source-SW header.
+    -Validation: The Java server saves the entry to the database and notifies all agents via WebSocket.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Security
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+    Project uses defense in depth:
+        -Tokens are never accessible via JavaScript (HttpOnly).
+        -Each synchronization request is validated by the worker's origin and specific header.
+        -GraphQL schemas are strictly typed to prevent data injection.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Future Developments
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+    -HTTP/3 protocol support for very low-latency areas.
+    -Massive map tile caching for 100% blind mode.
+    -Algorithm for calculating the shortest path to an incident via forest trails.

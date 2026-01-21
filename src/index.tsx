@@ -1,15 +1,31 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { ApolloProvider } from '@apollo/client/react';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
+import LoadingSpinner from './components/spinner';
+import { Demarrage } from './components/hanldle-online-ops';
+import { apolloClient } from './services/apollo-client';
+
+
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <React.Suspense fallback={<LoadingSpinner fullScreen/>}>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <ApolloProvider client={apolloClient}>
+          <Demarrage>
+            <App />
+          </Demarrage>
+      </ApolloProvider>
+      </BrowserRouter>
+    </React.Suspense>
   </React.StrictMode>
 );
 

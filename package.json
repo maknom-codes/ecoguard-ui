@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^4.0.13",
+    "@hookform/resolvers": "^3.9.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
@@ -11,17 +13,33 @@
     "@types/node": "^16.18.126",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
+    "dexie": "^4.0.1",
+    "dexie-react-hooks": "^4.2.0",
+    "graphql": "^16.12.0",
+    "graphql-ws": "^6.0.6",
+    "jwt-decode": "^4.0.0",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.400.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-hook-form": "^7.52.0",
+    "react-hot-toast": "^2.6.0",
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^7.0.0",
     "react-scripts": "5.0.1",
+    "tailwindcss": "3.4",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zod": "^3.23.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext ts,tsx",
+    "sw:dev": "concurrently \"npm start\" \"nodemon --watch public/sync-service-worker.js --exec 'cp public/sync-service-worker.js build/ 2>/dev/null || echo waiting for build folder'\""
   },
   "eslintConfig": {
     "extends": [
@@ -40,5 +58,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.21",
+    "@types/webpack-env": "^1.18.8",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^8.45.0",
+    "postcss": "^8.5.6",
+    "typescript": "^4.9.5",
+    "webpack-cli": "^6.0.1"
   }
 }
