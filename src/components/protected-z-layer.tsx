@@ -1,28 +1,27 @@
 import React from "react"
-import { ProtectedZone } from "../services/z-service"
-import { GeoJSON, Tooltip } from "react-leaflet"
+import { GeoJSON } from "react-leaflet"
+import { ZoneFeatureCollection } from "./type"
 
 interface IProtectedZoneProps {
-    zones: ProtectedZone[]
+    zones: ZoneFeatureCollection
 }
 
 export const ProtectedZoneLayer: React.FC<IProtectedZoneProps> = ({ zones }) => {
     return (
         <React.Fragment>
-            {zones.map((zone) => (
                 <GeoJSON 
-                    key={zone.id} 
-                    data={JSON.parse(zone.geoJson)}
+                    key={zones.features.length} 
+                    data={zones}
                     style={{
                         color: '#059669',
                         weight: 2,
                         fillColor: '#10b981', 
                         fillOpacity: 0.2
                     }}
-                >
-                    <Tooltip sticky>{zone.name}</Tooltip>
-                </GeoJSON>
-            ))}
+                    onEachFeature={(feature, layer) => {
+                        layer.bindTooltip(` <Tooltip sticky>${feature.properties.name}</Tooltip>`)
+                    }}
+                />
         </React.Fragment>
     )
 } 

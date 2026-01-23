@@ -18,7 +18,7 @@ import { SyncStatus } from '../db/sync.type';
 import { gql } from '@apollo/client';
 import { useSubscription } from '@apollo/client/react';
 import { IZone, zoneService } from '../services/z-service';
-import { IncidentFeatureCollection, IncidentForm } from '../components/type';
+import { IncidentFeatureCollection, IncidentForm, ZoneFeatureCollection } from '../components/type';
 import { syncService } from '../services/sync-service';
 import { SignalementModal } from '../components/set-incident';
 import toast from 'react-hot-toast';
@@ -61,7 +61,11 @@ const Dashboard: React.FC = () => {
   if (error) console.error("Erreur WebSocket détectée :", error);
   if (data) console.log("Message reçu du serveur !", data);  
   // const [refreshData, setRefreshData] = useState<boolean>(false);
-  const [zones, setZones] = useState<IZone>({ success: false, protectedZones: [], incidentZones: {} as IncidentFeatureCollection});
+  const [zones, setZones] = useState<IZone>({ 
+    success: false, 
+    protectedZones: {} as ZoneFeatureCollection, 
+    incidentZones: {} as IncidentFeatureCollection 
+  });
   // const onRefreshData = () => setRefreshData(!refreshData);
   const openSignalForm = () => setOpenModal(!openModal);
   const { status, pendingItems, sync, lastSync } = useSync();

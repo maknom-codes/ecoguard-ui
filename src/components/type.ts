@@ -42,9 +42,19 @@ export interface IncidentProperties {
     reportDate: string;
 };
 
+export interface ZoneProperties {
+    id: number;
+    name: number;
+};
+
 export interface IncidentGeometry {
   type: 'Point';
   coordinates: [number, number]; 
+};
+
+export interface ZoneGeometry {
+  type: 'Point';
+  coordinates: number[][][]; 
 };
 
 export interface IncidentFeature {
@@ -53,8 +63,19 @@ export interface IncidentFeature {
   properties: IncidentProperties;
 };
 
+export interface ZoneFeature {
+  type: 'Feature';
+  geometry: ZoneGeometry;
+  properties: ZoneProperties;
+};
+
 export interface IncidentFeatureCollection {
   type: 'FeatureCollection';
   features: IncidentFeature[];
+};
+
+export interface ZoneFeatureCollection {
+  type: 'FeatureCollection';
+  features: ZoneFeature[];
 };
 

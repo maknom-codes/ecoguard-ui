@@ -8,7 +8,7 @@ import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { IncidentLayers } from './incident-layer';
 import { ProtectedZoneLayer } from './protected-z-layer';
-import { IncidentFeatureCollection } from './type';
+import { IncidentFeatureCollection, ZoneFeatureCollection } from './type';
 
 
 let DefaultIcon = L.icon({
@@ -20,7 +20,7 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 interface IMapViewerProps {
-    zones: any,
+    zones: ZoneFeatureCollection,
     geo: IncidentFeatureCollection
 };
 

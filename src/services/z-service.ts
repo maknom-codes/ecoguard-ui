@@ -1,4 +1,4 @@
-import { IncidentFeatureCollection } from "../components/type";
+import { IncidentFeatureCollection, ZoneFeatureCollection } from "../components/type";
 import { GraphQLClient } from "./api";
 
 export interface ProtectedZone {
@@ -20,7 +20,7 @@ export interface IncidentZone {
 
 export interface IZone {
     success: boolean,
-    protectedZones: ProtectedZone[],
+    protectedZones: ZoneFeatureCollection,
     incidentZones: IncidentFeatureCollection
 }
 
@@ -31,10 +31,19 @@ export const zoneService = {
         const query = `
         query Get { 
             getZones { 
-                protectedZones { 
-                    id 
-                    name 
-                    geoJson 
+                protectedZones {
+                    type
+                    features {
+                        type
+                        geometry {
+                            type
+                            coordinates
+                        }
+                        properties {
+                            id
+                            name
+                        }
+                    }
                 } 
                 incidentZones { 
                     type
