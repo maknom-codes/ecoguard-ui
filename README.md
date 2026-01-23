@@ -1,4 +1,4 @@
-### EcoGuard - Real-Time Forest Monitoring System
+### EcoGuard-ui - Real-Time Forest Monitoring System
 
     EcoGuard is a cutting-edge progressive web application (PWA) designed for forest rangers working in challenging 
     connectivity environments. The system enables incident reporting (poaching, deforestation, fires) with an offline-first 
