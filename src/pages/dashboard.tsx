@@ -52,6 +52,7 @@ const SYNC_SUBSCRIPTION = gql`
 
 
 const Dashboard: React.FC = () => {
+  document.title = "Ecoguard";
   const [openModal, setOpenModal] = useState<boolean>(false);
   const onLine = useNetworkStatus();
   // const [pendingSync, setPendingSync] = useState(3); 

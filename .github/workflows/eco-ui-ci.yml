@@ -1,0 +1,29 @@
+name: Ecoguard ui CI
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: install dependency
+        run: npm install
+
+      - name: check style (Linting)
+        run: npm run lint 
+      
+      - name: Lancer les tests unitaires
+        run: npm test
+
+      - name: build project
+        run: npm run build 
