@@ -11,32 +11,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Frontend
+      - name: checkout frontend
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: set up node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci 
+      - name: install dependencies
+        run: npm install 
 
-      - name: Run ESLint (Linting)
+      - name: run esLint
         run: npm run lint
 
-      - name: Run Unit Tests (Jest)
+      - name: run test
         run: npm test -- --watchAll=false --coverage
         env:
           CI: true
 
-      - name: Build UI for production
+      - name: build
         run: npm run build
         env:
           CI: false 
 
-      - name: Upload Test Results
+      - name: upload test result
         if: always()
         uses: actions/upload-artifact@v4
         with:
