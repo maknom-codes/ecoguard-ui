@@ -1,29 +1,44 @@
-name: Ecoguard ui CI
+name: Ecoguard UI CI
 
 on:
   push:
     branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
-  build-and-lint:
+  build-and-test-ui:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: setup node.js
+    steps:
+      - name: Checkout Frontend
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: install dependency
-        run: npm install
+      - name: Install dependencies
+        run: npm ci 
 
-      - name: check style (Linting)
-        run: npm run lint 
-      
-      - name: Lancer les tests unitaires
-        run: npm test
+      - name: Run ESLint (Linting)
+        run: npm run lint
 
-      - name: build project
-        run: npm run build 
+      - name: Run Unit Tests (Jest)
+        run: npm test -- --watchAll=false --coverage
+        env:
+          CI: true
+
+      - name: Build UI for production
+        run: npm run build
+        env:
+          CI: false 
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
