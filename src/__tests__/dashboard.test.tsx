@@ -3,6 +3,12 @@ import React from "react";
 import Dashboard from "../pages/dashboard";
 
 
+jest.mock('leaflet', () => ({
+  ...jest.requireActual('leaflet'),
+  control: () => ({ addType: jest.fn(), addTo: jest.fn() }),
+  map: () => ({ setView: jest.fn(), addLayer: jest.fn() }),
+}));
+
 jest.mock('@apollo/client', () => ({
   gql: (strings: any) => strings[0]
 }));
