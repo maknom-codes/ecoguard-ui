@@ -90,7 +90,8 @@ export const SignalementModal = ({ onClose, onSubmit }: any) => {
             placeholder="Describe incident"
         ></textarea>
         </div>
-        <button 
+        <button
+            data-testid="suivant" 
             onClick={() => setStep('CONFIRM')}
             className="w-full bg-emerald-600 text-white py-4 rounded-2xl font-black text-lg shadow-lg shadow-emerald-200"
         >

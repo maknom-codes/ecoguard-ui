@@ -16,13 +16,17 @@ test('send a successful registred incident', async ({ page, context }) => {
     await context.grantPermissions(['geolocation']);
 
     await page.screenshot({ path: 'screenshot.png' });
-
+    await page.getByTestId('signaler').click();
+    
     await page.getByTestId('btn-flore').click();
     await page.getByTestId('btn-low').click();
-
-
+    
+    
     await page.getByTestId('description').fill('Incendie zone Nord');
+    await page.getByTestId('suivant').click();
+
     await page.click('button[type="submit"]');
+    await page.screenshot({ path: 'screenshot.png' });
 
     const successMessage = page.locator('text=Signalement envoyé en direct!');
     await expect(successMessage).toBeVisible();

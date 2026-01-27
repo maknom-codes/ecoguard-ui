@@ -212,7 +212,7 @@ const Dashboard: React.FC = () => {
             <span className="hidden sm:inline">Mes Rapports</span>
           </button>
 
-          <button onClick={() => openSignalForm()} className="bg-emerald-600 text-white p-5 rounded-3xl shadow-2xl shadow-emerald-900/40 flex items-center gap-3 transition-all hover:bg-emerald-700 active:scale-90 group">
+          <button data-testid="signaler" onClick={() => openSignalForm()} className="bg-emerald-600 text-white p-5 rounded-3xl shadow-2xl shadow-emerald-900/40 flex items-center gap-3 transition-all hover:bg-emerald-700 active:scale-90 group">
             <div className="bg-white/20 p-1 rounded-lg">
               <Plus size={28} strokeWidth={3} />
             </div>
