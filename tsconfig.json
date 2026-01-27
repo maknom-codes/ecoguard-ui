@@ -27,7 +27,7 @@
   "include": [
     "src",
     "src/**/*.ts",
-    "src/**/*.tsx",
+    "src/**/*.tsx", "e2e-tests",
   ],
   "exclude": ["node_modules"]
 }
