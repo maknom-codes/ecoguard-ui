@@ -59,7 +59,7 @@ jobs:
           psql -h localhost -U postgres -d db_ecoguard -c "CREATE TABLE IF NOT EXISTS protected_zones (id SERIAL PRIMARY KEY, name VARCHAR(100), geom GEOMETRY(POLYGON, 4326));"
           psql -h localhost -U postgres -d db_ecoguard -c "CREATE TABLE IF NOT EXISTS incidents (id SERIAL PRIMARY KEY, category VARCHAR(100), description TEXT, urgency VARCHAR(12), report_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, geom GEOMETRY(POINT, 4326), zone_id INTEGER REFERENCES protected_zones(id), user_id INTEGER REFERENCES users(id));"
           psql -h localhost -U postgres -d db_ecoguard -c "INSERT INTO users (name, email, role, password) VALUES ('Koko Popom', 'koko.popom@gmail.com', 'ADMIN', crypt('koko', gen_salt('bf')));"
-          psql -h localhost -U postgres -d db_ecoguard -c "INSERT INTO protected_zones (id, nom, geom) VALUES (999, 'Zone de Test CI', ST_GeomFromText('POLYGON((0 0, 0 1, 1 1, 1 0, 0 0))', 4326));"
+          psql -h localhost -U postgres -d db_ecoguard -c "INSERT INTO protected_zones (id, name, geom) VALUES (999, 'Zone de Test CI', ST_GeomFromText('POLYGON((0 0, 0 1, 1 1, 1 0, 0 0))', 4326));"
         env:
           PGPASSWORD: ecoguard
 
