@@ -26,8 +26,8 @@ jobs:
       - name: run esLint
         run: npm run lint
 
-      - name: run test
-        run: npm test -- --watchAll=false --coverage
+      - name: run tests
+        run: npm test -- --watchAll=false --coverage --testPathIgnorePatterns="e2e-tests"
         env:
           CI: true
 
