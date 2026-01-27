@@ -83,6 +83,7 @@ const LoginPage: React.FC = () => {
                         </span>
                         <input
                             type="text"
+                            name='email'
                             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
                             placeholder="Ex: garde_douala"
                             value={formData.email}
@@ -98,6 +99,7 @@ const LoginPage: React.FC = () => {
                         <Lock size={18} />
                     </span>
                     <input
+                        name='password'
                         type="password"
                         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
                         placeholder="••••••••"
