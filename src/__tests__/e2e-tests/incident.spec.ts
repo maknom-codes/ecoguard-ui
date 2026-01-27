@@ -1,0 +1,19 @@
+import { test, expect } from '@playwright/test';
+
+
+test('send a successful registred incident', async ({ page, context }) => {
+    await context.setGeolocation({ longitude: 0.5, latitude: 0.5 });
+    await context.grantPermissions(['geolocation']);
+
+    await page.goto('http://localhost:3000');
+
+    await page.click('button[key="FLORE"]');
+    await page.click('button[key="LOW"]');
+
+
+    await page.fill('textarea[id="description"]', 'Incendie zone Nord');
+    await page.click('button[type="submit"]');
+
+    const successMessage = page.locator('text=Signalement envoyé en direct!');
+    await expect(successMessage).toBeVisible();
+});

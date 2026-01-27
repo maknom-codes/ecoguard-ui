@@ -49,7 +49,7 @@ export const SignalementModal = ({ onClose, onSubmit }: any) => {
         <label className="block text-sm font-bold text-slate-500 mb-2">CATÉGORIE</label>
         <div className="grid grid-cols-2 gap-2 mb-4">
             {['FAUNE', 'FLORE', 'POLLUTION', 'INCENDIE'].map(cat => (
-            <button 
+            <button
                 key={cat}
                 onClick={() => setFormData({...formData, category: cat})}
                 className={`p-3 rounded-xl border-2 font-bold transition-all ${formData.category === cat ? 'border-emerald-600 bg-emerald-50 text-emerald-700' : 'border-slate-100 text-slate-400'}`}

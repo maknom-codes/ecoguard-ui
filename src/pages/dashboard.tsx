@@ -123,7 +123,7 @@ const Dashboard: React.FC = () => {
           if (navigator.onLine) {
               zoneService.createIncident(incidentData)
                   .then((createIncident) => {
-                      toast.success("Signalement envoyé en direct !");
+                      toast.success("Signalement envoyé en direct!");
                     })
           } else {
               await syncService.saveForSync(incidentData); 

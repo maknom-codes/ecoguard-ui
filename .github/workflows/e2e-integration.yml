@@ -1,0 +1,97 @@
+name: EcoGuard Full-Stack E2E Orchestrator
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    services:
+    
+      postgres:
+        image: postgis/postgis:17-3.5-alpine
+        env:
+          POSTGRES_DB: db_ecoguard
+          POSTGRES_PASSWORD: ecoguard
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - "6379:6379"
+        options: >-
+          --health-cmd "redis-cli ping" # FIX 1 : Commande de health check pour Redis
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Frontend
+        uses: actions/checkout@v4
+
+      - name: Checkout Backend
+        uses: actions/checkout@v4
+        with:
+          repository: maknom-codes/ecoguard
+          path: backend-eco
+
+      - name: setup java and node
+        uses: actions/setup-java@v4
+        with: {java-version: '17', distribution: 'temurin'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '20', cache: 'npm'}
+
+      - name: wait for postgres services
+        run: npx wait-on tcp:localhost:5432 --timeout 60000 
+      
+      - name: schema creation and data test injection
+        run: |
+          psql -h localhost -U postgres -d db_ecoguard -c "CREATE EXTENSION IF NOT EXISTS postgis; CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+          psql -h localhost -U postgres -d db_ecoguard -c "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name VARCHAR(100), email VARCHAR(100), password VARCHAR(100), role VARCHAR(12));"
+          psql -h localhost -U postgres -d db_ecoguard -c "CREATE TABLE IF NOT EXISTS protected_zones (id SERIAL PRIMARY KEY, name VARCHAR(100), geom GEOMETRY(POLYGON, 4326));"
+          psql -h localhost -U postgres -d db_ecoguard -c "CREATE TABLE IF NOT EXISTS incidents (id SERIAL PRIMARY KEY, category VARCHAR(100), description TEXT, urgency VARCHAR(12), report_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, geom GEOMETRY(POINT, 4326), zone_id INTEGER REFERENCES protected_zones(id), user_id INTEGER REFERENCES users(id));"
+          psql -h localhost -U postgres -d db_ecoguard -c "INSERT INTO users (name, email, role, password) VALUES ('Koko Popom', 'koko.popom@gmail.com', 'ADMIN', crypt('koko', gen_salt('bf')));"
+          psql -h localhost -U postgres -d db_ecoguard -c "INSERT INTO protected_zones (id, nom, geom) VALUES (999, 'Zone de Test CI', ST_GeomFromText('POLYGON((0 0, 0 1, 1 1, 1 0, 0 0))', 4326));"
+        env:
+          PGPASSWORD: ecoguard
+
+
+      - name: launch bknd
+        run: |
+          cd backend-eco
+          chmod +x gradlew
+          ./gradlew bootRun &
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/db_ecoguard
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: ecoguard
+          SPRING_REDIS_HOST: localhost
+          SPRING_REDIS_PORT: 6379 
+          SPRING_PROFILES_ACTIVE: test
+
+
+      - name: install and launch front
+        run: |
+          npm install
+          npm start &
+        env:
+          REACT_APP_BASE_URL: http://localhost:8081/graphql
+          REACT_APP_WS_URL: ws://localhost:8081/graphql
+ 
+
+      - name: install  playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: wait until frontend is ready
+        run: npx wait-on http://localhost:3000 --timeout 120000
+
+      - name: launch test E2E
+        run: npx playwright test
