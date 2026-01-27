@@ -72,6 +72,7 @@
     "webpack-cli": "^6.0.1"
   },
   "jest": {
+    "testEnvironment": "jsdom",
     "transformIgnorePatterns": [
       "node_modules/(?!(react-leaflet|@react-leaflet|@apollo|ts-invariant|lucide-react)/)"
     ]
