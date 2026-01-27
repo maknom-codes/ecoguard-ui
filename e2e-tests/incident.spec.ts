@@ -7,6 +7,7 @@ test('send a successful registred incident', async ({ page, context }) => {
     await context.grantPermissions(['geolocation']);
 
     await page.goto('http://localhost:3000');
+    await page.screenshot({ path: 'screenshot.png' }); // Prend une photo de l'erreur
 
     await page.getByTestId('btn-flore').click();
     await page.getByTestId('btn-low').click();
