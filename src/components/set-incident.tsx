@@ -50,6 +50,7 @@ export const SignalementModal = ({ onClose, onSubmit }: any) => {
         <div className="grid grid-cols-2 gap-2 mb-4">
             {['FAUNE', 'FLORE', 'POLLUTION', 'INCENDIE'].map(cat => (
             <button
+                data-testid={`btn-${cat.toLowerCase()}`}
                 key={cat}
                 onClick={() => setFormData({...formData, category: cat})}
                 className={`p-3 rounded-xl border-2 font-bold transition-all ${formData.category === cat ? 'border-emerald-600 bg-emerald-50 text-emerald-700' : 'border-slate-100 text-slate-400'}`}
@@ -68,6 +69,7 @@ export const SignalementModal = ({ onClose, onSubmit }: any) => {
             {val: 'CRITICAL' as Level, color: 'bg-red-600'}
             ].map(u => (
             <button
+                data-testid={`btn-${u.val.toLowerCase()}`}
                 key={u.val}
                 onClick={() => setFormData({...formData, urgency: u.val})}
                 className={`flex-1 h-12 rounded-xl border-4 transition-all ${u.color} ${formData.urgency === u.val ? 'border-white ring-2 ring-slate-300 scale-110' : 'border-transparent opacity-60'}`}
@@ -81,6 +83,7 @@ export const SignalementModal = ({ onClose, onSubmit }: any) => {
         <textarea
             onChange={(e) => setFormData({...formData, description: e.target.value})}
             id="description"
+            data-testid="description"
             name="description"
             rows={4}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 placeholder-gray-400"
@@ -130,7 +133,8 @@ export const SignalementModal = ({ onClose, onSubmit }: any) => {
         </div>
 
         <div className="flex gap-3">
-            <button 
+            <button
+                type='submit' 
                 onClick={() => onSubmit(formData)}
                 className="flex-grow bg-emerald-600 text-white py-4 rounded-2xl font-black flex items-center justify-center gap-2"
             >
