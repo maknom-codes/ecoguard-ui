@@ -10,12 +10,12 @@ test('send a successful registred incident', async ({ page, context }) => {
     await page.click('button[type="submit"]');
 
     await expect(page).toHaveURL(/.*dashboard/);
-
+    page.on('console', msg => console.log('BROWSER LOG:', msg.text()));
+    page.on('requestfailed', request => console.log('API ERROR:', request.url(), request.failure()?.errorText));
 
     await context.setGeolocation({ longitude: 0.5, latitude: 0.5 });
     await context.grantPermissions(['geolocation']);
 
-    await page.screenshot({ path: 'screenshot.png' });
     await page.getByTestId('signaler').click();
     
     await page.getByTestId('btn-flore').click();

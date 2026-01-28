@@ -13,7 +13,8 @@ export const SignalementModal = ({ onClose, onSubmit }: any) => {
         category: 'FLORE',
         urgency: 'MEDIUM',
         description: 'maawawet',
-        latlng: { lat: 4.05, lng: 9.72 }, 
+        // latlng: { lat: 4.05, lng: 9.72 }, 
+        latlng: { lat: 0.5, lng: 0.5 }, 
         latitude: null,
         longitude: null
     });
