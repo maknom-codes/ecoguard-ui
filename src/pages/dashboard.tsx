@@ -72,20 +72,20 @@ const Dashboard: React.FC = () => {
   const { status, pendingItems, sync, lastSync } = useSync();
 
   const init = async () => {
-      if (data?.syncCompleted?.type === 'incident') {
+      if (data?.syncCompleted?.type === 'incident' && data.syncCompleted.data?.properties) {
           const incident = data.syncCompleted.data;
           toast.custom(`Nouvel incident : ${incident.properties.category} signalé par ${incident.properties.userId}`);
-          setZones(prev => ({
-            ...prev,
-            incidentZones: { 
-              ...prev.incidentZones,
-              features: [
-                ...prev.incidentZones.features,
-                incident
-              ]
-            }
-          }));
-      }else {
+          setZones(prev => {
+            if (!prev?.incidentZones?.features) return prev;
+            return {
+              ...prev,
+              incidentZones: { 
+                ...prev.incidentZones,
+                features: [...prev.incidentZones.features, incident]
+              }
+            };
+          });
+      }else if (!data?.syncCompleted) {
         const response = zoneService.getAllZones();
         response.then((zs) => {
           if (zs.incidentZones.type) {

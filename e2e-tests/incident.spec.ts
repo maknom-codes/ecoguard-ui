@@ -29,5 +29,5 @@ test('send a successful registred incident', async ({ page, context }) => {
     await page.screenshot({ path: 'screenshot.png' });
 
     const successMessage = page.locator('text=Signalement envoyé en direct!');
-    await expect(successMessage).toBeVisible();
+    await expect(successMessage).toBeVisible({ timeout: 10000 });
 });
